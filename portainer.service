@@ -1,0 +1,26 @@
+[Unit]
+Description=Portainer
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+RestartSec=10
+Restart=always
+
+ExecStartPre=-/usr/bin/docker stop portainer
+ExecStartPre=-/usr/bin/docker rm portainer
+ExecStartPre=-/usr/bin/docker pull portainer/portainer:latest
+
+ExecStart=/usr/bin/docker run -t \
+    --rm \
+    -v portainer-data:/data \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -p 9000:9000 \
+    --name=portainer \
+    portainer/portainer:latest
+
+ExecStop=-/usr/bin/docker stop -t 3 portainer
+
+[Install]
+WantedBy=multi-user.target
