@@ -18,8 +18,9 @@ docker -H tcp://localhost:2376 ...
 or by setting the `DOCKER_HOST` environment variable to `tcp://localhost:2376`.
 
 A [Portainer instance](https://portainer.io) is running at
-http://localhost:9000. The VM can also transparently run non-amd64 binaries,
-using the
+http://localhost:9000. After setting up the admin password, select "Local" to
+manage the VM's Docker instance. The VM can also transparently run non-amd64
+binaries, using the
 [fkrull/qemu-user-static](https://hub.docker.com/r/fkrull/qemu-user-static)
 Docker image. This allows building and running foreign-architecture Docker
 images, for example.

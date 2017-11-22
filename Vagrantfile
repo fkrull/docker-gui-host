@@ -12,8 +12,8 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--accelerate3d", "off"]
   end
 
-  config.vm.network :forwarded_port, guest: 2376, host: 2376
-  config.vm.network :forwarded_port, guest: 9000, host: 9000
+  config.vm.network :forwarded_port, guest: 2376, host: 2376, host_ip: '127.0.0.1'
+  config.vm.network :forwarded_port, guest: 9000, host: 9000, host_ip: '127.0.0.1'
 
   config.vm.provision :shell, inline: <<-EOF
     if ! which docker; then
