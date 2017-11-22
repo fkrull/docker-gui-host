@@ -8,6 +8,8 @@ Vagrant.configure("2") do |config|
     vb.cpus = 2
     vb.gui = true
     vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+    vb.customize ["modifyvm", :id, "--vram", 128]
+    vb.customize ["modifyvm", :id, "--accelerate3d", "off"]
   end
 
   config.vm.network :forwarded_port, guest: 2376, host: 2376
