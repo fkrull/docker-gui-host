@@ -16,6 +16,10 @@ Vagrant.configure("2") do |config|
   config.vm.network :forwarded_port, guest: 9000, host: 9000, host_ip: '127.0.0.1'
 
   config.vm.provision :shell, inline: <<-EOF
+    apt-get update
+    apt-get install -y python-pip vim
+    pip install docker-compose
+
     if ! which docker; then
       curl -fsSL get.docker.com | bash -
     fi
