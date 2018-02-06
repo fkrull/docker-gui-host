@@ -1,0 +1,5 @@
+Cpus = 2
+Memory = 2048
+Gui = true
+VRAM = 128
+Accelerate3D = true
