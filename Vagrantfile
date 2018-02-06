@@ -28,28 +28,10 @@ Vagrant.configure("2") do |config|
   config.vm.network :forwarded_port, guest: 5000, host: 5000, host_ip: '127.0.0.1'
   config.vm.network :forwarded_port, guest: 9000, host: 9000, host_ip: '127.0.0.1'
 
-  config.vm.provision :shell, inline: <<-EOF
-    apt-get update
-    apt-get install -y python-pip vim
-    pip install docker-compose
-
-    if ! which docker; then
-      curl -fsSL get.docker.com | bash -
-    fi
-    usermod -aG docker vagrant
-
-    mkdir -p /etc/systemd/system/docker.service.d
-    cp /vagrant/docker.conf /etc/systemd/system/docker.service.d/
-    cp /vagrant/daemon.json /etc/docker/
-    cp /vagrant/portainer-endpoint.json /etc/
-    cp /vagrant/portainer.service /etc/systemd/system/
-    cp /vagrant/registry.service /etc/systemd/system/
-    cp /vagrant/qemu-user-static.service /etc/systemd/system/
-
-    systemctl daemon-reload
-    systemctl restart docker.service
-    systemctl enable --now portainer.service
-    systemctl enable --now registry.service
-    systemctl enable --now qemu-user-static.service
-  EOF
+  config.vm.provision :ansible_local do |ansible|
+    ansible.provisioning_path = "/vagrant/provision"
+    ansible.playbook = "docker-host.yaml"
+    ansible.galaxy_role_file = "roles.yaml"
+    ansible.compatibility_mode = "2.0"
+  end
 end

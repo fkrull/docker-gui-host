@@ -1,0 +1,68 @@
+---
+- hosts: default
+  become: true
+
+  tasks:
+  - name: install packages
+    apt: name={{ item }} state=latest
+    with_items:
+      - python-pip
+      - vim
+
+  - name: install docker-compose
+    pip: name=docker-compose state=latest
+
+  - command: which docker
+    register: which_docker
+    ignore_errors: true
+
+  - block:
+    - get_url: url=https://get.docker.com dest=/tmp/get-docker.sh
+    - command: /bin/bash /tmp/get-docker.sh
+    - file: path=/tmp/get-docker.sh state=absent
+    when: which_docker | failed
+
+  - name: add vagrant to docker group
+    user: name=vagrant groups=docker append=yes
+
+  - block:
+    - file: path=/etc/systemd/system/docker.service.d state=directory
+    - copy: src=docker.conf dest=/etc/systemd/system/docker.service.d/
+    - copy: src=daemon.json dest=/etc/docker/
+
+  - name: add additional config files
+    copy: src=portainer-endpoints.json dest=/etc/portainer-endpoints.json
+
+  - block:
+    - include_role:
+        name: fkrull.docker-systemd
+      vars:
+        name: portainer
+        description: Portainer
+        image: portainer/portainer:latest
+        ports:
+          - 9000:9000
+        volumes:
+          - portainer-data:/data
+          - /var/run/docker.sock:/var/run/docker.sock
+          - /etc/portainer-endpoints.json:/etc/portainer-endpoints.json
+        cmd: --no-auth --external-endpoints=/etc/portainer-endpoints.json
+
+    - include_role:
+        name: fkrull.docker-systemd
+      vars:
+        name: private-registry
+        description: Private Docker Registry
+        image: registry:2
+        ports:
+          - 5000:5000
+        volumes:
+          - private-registry-data:/var/lib/registry
+
+  - block:
+    - copy: src=qemu-user-static.service dest=/etc/systemd/system/
+    - systemd:
+        name: qemu-user-static
+        daemon_reload: true
+        enabled: true
+        state: started
