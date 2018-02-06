@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.network :forwarded_port, guest: 2376, host: 2376, host_ip: '127.0.0.1'
-  config.vm.network :forwarded_port, guest: 5000, host: 5000, host_ip: '127.0.0.1'
+  config.vm.network :forwarded_port, guest: 5000, host: 5000
   config.vm.network :forwarded_port, guest: 9000, host: 9000, host_ip: '127.0.0.1'
 
   config.vm.provision :ansible_local do |ansible|

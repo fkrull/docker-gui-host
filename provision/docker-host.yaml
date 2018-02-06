@@ -51,13 +51,13 @@
     - include_role:
         name: fkrull.docker-systemd
       vars:
-        name: private-registry
-        description: Private Docker Registry
+        name: registry
+        description: Docker Registry
         image: registry:2
         ports:
           - 5000:5000
         volumes:
-          - private-registry-data:/var/lib/registry
+          - registry-data:/var/lib/registry
 
   - block:
     - copy: src=qemu-user-static.service dest=/etc/systemd/system/
