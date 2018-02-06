@@ -16,9 +16,12 @@ ExecStart=/usr/bin/docker run -t \
     --rm \
     -v portainer-data:/data \
     -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /etc/portainer-endpoint.json:/etc/portainer-endpoint.json \
     -p 9000:9000 \
     --name=portainer \
-    portainer/portainer:latest
+    portainer/portainer:latest \
+    --no-auth \
+    --external-endpoints /etc/portainer-endpoint.json
 
 ExecStop=-/usr/bin/docker stop -t 3 portainer
 
