@@ -24,9 +24,18 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--accelerate3d", Accelerate3D ? "on" : "off"]
   end
 
-  config.vm.network :forwarded_port, guest: 2376, host: 2376, host_ip: '127.0.0.1'
-  config.vm.network :forwarded_port, guest: 5000, host: 5000
-  config.vm.network :forwarded_port, guest: 9000, host: 9000, host_ip: '127.0.0.1'
+  config.vm.network :forwarded_port,
+    id: "docker",
+    guest: 2376, host: 2376, host_ip: '127.0.0.1',
+    auto_correct: true
+  config.vm.network :forwarded_port,
+    id: "registry",
+    guest: 5000, host: 5000,
+    auto_correct: true
+  config.vm.network :forwarded_port,
+    id: "portainer",
+    guest: 9000, host: 9000, host_ip: '127.0.0.1',
+    auto_correct: true
 
   config.vm.provision :ansible_local do |ansible|
     ansible.provisioning_path = "/vagrant/provision"
