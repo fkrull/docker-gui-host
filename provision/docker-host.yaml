@@ -60,7 +60,9 @@
           - registry-data:/var/lib/registry
 
   - block:
-    - copy: src=qemu-user-static.service dest=/etc/systemd/system/
+    - get_url:
+        src: https://raw.githubusercontent.com/fkrull/docker-qemu-user-static/master/qemu-user-static.service
+        dest: /etc/systemd/system/qemu-user-static.service
     - systemd:
         name: qemu-user-static
         daemon_reload: true
