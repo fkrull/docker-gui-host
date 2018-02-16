@@ -12,6 +12,7 @@ Memory = 2048 unless defined?(Memory)
 Gui = true unless defined?(Gui)
 VRAM = 128 unless defined?(VRAM)
 Accelerate3D = true unless defined?(Accelerate3D)
+SyncedFolders = [] unless defined?(SyncedFolders)
 
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/debian-9"
@@ -22,6 +23,11 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
     vb.customize ["modifyvm", :id, "--vram", VRAM]
     vb.customize ["modifyvm", :id, "--accelerate3d", Accelerate3D ? "on" : "off"]
+  end
+
+  SyncedFolders.each do |path|
+    basename = File.basename(path)
+    config.vm.synced_folder path, "/" + basename, id: basename
   end
 
   config.vm.network :forwarded_port,

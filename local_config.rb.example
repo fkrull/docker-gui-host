@@ -3,3 +3,4 @@ Memory = 2048
 Gui = true
 VRAM = 128
 Accelerate3D = true
+SyncedFolders = [File.expand_path("~")]
