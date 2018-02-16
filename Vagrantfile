@@ -9,7 +9,7 @@ end
 # default settings
 Cpus = 2 unless defined?(Cpus)
 Memory = 2048 unless defined?(Memory)
-Gui = true unless defined?(Gui)
+Gui = false unless defined?(Gui)
 VRAM = 128 unless defined?(VRAM)
 Accelerate3D = true unless defined?(Accelerate3D)
 SyncedFolders = [] unless defined?(SyncedFolders)
