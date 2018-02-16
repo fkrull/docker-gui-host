@@ -12,19 +12,6 @@
   - name: install docker-compose
     pip: name=docker-compose state=latest
 
-  - command: which docker
-    register: which_docker
-    ignore_errors: true
-
-  - block:
-    - get_url: url=https://get.docker.com dest=/tmp/get-docker.sh
-    - command: /bin/bash /tmp/get-docker.sh
-    - file: path=/tmp/get-docker.sh state=absent
-    when: which_docker | failed
-
-  - name: add vagrant to docker group
-    user: name=vagrant groups=docker append=yes
-
   - block:
     - file: path=/etc/systemd/system/docker.service.d state=directory
     - copy: src=docker.conf dest=/etc/systemd/system/docker.service.d/
@@ -61,7 +48,7 @@
 
   - block:
     - get_url:
-        src: https://raw.githubusercontent.com/fkrull/docker-qemu-user-static/master/qemu-user-static.service
+        url: https://raw.githubusercontent.com/fkrull/docker-qemu-user-static/master/qemu-user-static.service
         dest: /etc/systemd/system/qemu-user-static.service
     - systemd:
         name: qemu-user-static
