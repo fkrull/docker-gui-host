@@ -2,3 +2,4 @@
 local_config.rb
 provision/roles
 provision/*.retry
+work
