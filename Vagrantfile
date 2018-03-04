@@ -43,6 +43,8 @@ Vagrant.configure("2") do |config|
     guest: 9000, host: 9000, host_ip: '127.0.0.1',
     auto_correct: true
 
+  config.vm.network :private_network, type: :dhcp
+
   config.vm.provision :docker
   config.vm.provision :ansible_local do |ansible|
     ansible.provisioning_path = "/vagrant/provision"
