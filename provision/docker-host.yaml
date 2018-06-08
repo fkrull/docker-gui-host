@@ -6,6 +6,7 @@
   - name: install packages
     apt: name={{ item }} state=latest
     with_items:
+      - git
       - python-pip
       - vim
 
