@@ -49,7 +49,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision :ansible_local do |ansible|
     ansible.provisioning_path = "/vagrant/provision"
     ansible.playbook = "docker-host.yaml"
-    ansible.galaxy_role_file = "roles.yaml"
     ansible.compatibility_mode = "2.0"
   end
 end

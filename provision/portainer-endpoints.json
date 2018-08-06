@@ -1,6 +1,0 @@
-[
-    {
-        "Name": "localhost",
-        "URL": "unix:///var/run/docker.sock"
-    }
-]
