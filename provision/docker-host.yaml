@@ -16,39 +16,12 @@
   - copy: src=docker.conf dest=/etc/systemd/system/docker.service.d/
   - copy: src=daemon.json dest=/etc/docker/
   - copy: src=config.json dest=~vagrant/.docker/
-  - copy: src=portainer-endpoints.json dest=/etc/
 
   - name: install docker-compose unit files
     unarchive:
       remote_src: yes
       src: https://gitlab.com/fkrull/docker-compose-unit-files/-/jobs/artifacts/master/raw/docker-compose-unit-files.tar.gz?job=package
       dest: /etc/systemd/system/
-
-  - block:
-    - include_role:
-        name: fkrull.docker-systemd
-      vars:
-        name: portainer
-        description: Portainer
-        image: portainer/portainer:latest
-        ports:
-          - 9000:9000
-        volumes:
-          - portainer-data:/data
-          - /var/run/docker.sock:/var/run/docker.sock
-          - /etc/portainer-endpoints.json:/etc/portainer-endpoints.json
-        cmd: --no-auth --external-endpoints=/etc/portainer-endpoints.json
-
-    - include_role:
-        name: fkrull.docker-systemd
-      vars:
-        name: registry
-        description: Docker Registry
-        image: registry:2
-        ports:
-          - 5000:5000
-        volumes:
-          - registry-data:/var/lib/registry
 
   - block:
     - get_url:
@@ -59,3 +32,20 @@
         daemon_reload: true
         enabled: true
         state: started
+
+  - name: copy system containers configuration
+    synchronize:
+      checksum: true
+      delete: yes
+      group: false
+      owner: false
+      recursive: true
+      src: system
+      dest: /var/dockercompose/
+
+  - name: start system containers
+    systemd:
+      daemon-reload: true
+      name: docker-compose@var-dockercompose-system.service
+      enabled: true
+      state: reloaded

@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  portainer:
+    build: portainer
+    ports:
+      - 9000:9000
+    volumes:
+      - portainer-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  registry:
+    image: registry:2
+    ports:
+      - 5000:5000
+    volumes:
+      - registry-data:/var/lib/registry
+
+volumes:
+  portainer-data:
+  registry-data:
