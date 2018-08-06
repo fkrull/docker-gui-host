@@ -23,15 +23,16 @@
       src: https://gitlab.com/fkrull/docker-compose-unit-files/-/jobs/artifacts/master/raw/docker-compose-unit-files.tar.gz?job=package
       dest: /etc/systemd/system/
 
-  - block:
-    - get_url:
-        url: https://raw.githubusercontent.com/fkrull/docker-qemu-user-static/master/qemu-user-static.service
-        dest: /etc/systemd/system/qemu-user-static.service
-    - systemd:
-        name: qemu-user-static
-        daemon_reload: true
-        enabled: true
-        state: started
+  - name: get qemu-user-static unit file
+    get_url:
+      url: https://raw.githubusercontent.com/fkrull/docker-qemu-user-static/master/qemu-user-static.service
+      dest: /etc/systemd/system/qemu-user-static.service
+  - name: enable qemu-user-static
+    systemd:
+      name: qemu-user-static
+      daemon_reload: true
+      enabled: true
+      state: started
 
   - name: copy system containers configuration
     synchronize:
