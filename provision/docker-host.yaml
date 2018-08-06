@@ -3,7 +3,7 @@
   become: true
 
   tasks:
-  - name: install packages
+  - name: install base packages
     apt: name={{ item }} state=latest
     with_items:
       - git
@@ -13,15 +13,10 @@
   - name: install docker-compose
     pip: name=docker-compose state=latest
 
-  - block:
-    - file: path=/etc/systemd/system/docker.service.d state=directory
-    - copy: src=docker.conf dest=/etc/systemd/system/docker.service.d/
-    - copy: src=daemon.json dest=/etc/docker/
-    - file: path=~vagrant/.docker state=directory
-    - copy: src=docker-config.json dest=~vagrant/.docker/config.json
-
-  - name: add additional config files
-    copy: src=portainer-endpoints.json dest=/etc/portainer-endpoints.json
+  - copy: src=docker.conf dest=/etc/systemd/system/docker.service.d/
+  - copy: src=daemon.json dest=/etc/docker/
+  - copy: src=config.json dest=~vagrant/.docker/
+  - copy: src=portainer-endpoints.json dest=/etc/
 
   - block:
     - include_role:
