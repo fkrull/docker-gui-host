@@ -18,6 +18,12 @@
   - copy: src=config.json dest=~vagrant/.docker/
   - copy: src=portainer-endpoints.json dest=/etc/
 
+  - name: install docker-compose unit files
+    unarchive:
+      remote_src: yes
+      src: https://gitlab.com/fkrull/docker-compose-unit-files/-/jobs/artifacts/master/raw/docker-compose-unit-files.tar.gz?job=package
+      dest: /etc/systemd/system/
+
   - block:
     - include_role:
         name: fkrull.docker-systemd
